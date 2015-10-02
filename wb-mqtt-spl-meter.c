@@ -14,6 +14,9 @@ static int port = 1883;
 static char *device = "default";
 static int sample_rate = 16000;
 static int period = 500;
+static double k = 0.45255;
+
+static bool debug = false;
 
 static snd_pcm_t *capture;
 struct mosquitto *mosq;
@@ -26,7 +29,7 @@ static int parse_options(int argc, char *argv[])
 	int ret;
 	char *endptr;
 
-	while ((ret = getopt(argc, argv, "h:p:d:r:t:")) != -1) {
+	while ((ret = getopt(argc, argv, "h:p:d:r:t:D")) != -1) {
 		switch (ret) {
 			case 'h':
 				host = optarg;
@@ -58,6 +61,18 @@ static int parse_options(int argc, char *argv[])
 					fprintf(stderr, "'%s' is not a valid RMS period\n", optarg);
 					return 1;
 				}
+				break;
+
+			case 'k':
+				k = strtod(optarg, &endptr);
+				if (*endptr != 0) {
+					fprintf(stderr, "'%s' is not a valid float value\n", optarg);
+					return 1;
+				}
+				break;
+
+			case 'D':
+				debug = true;
 				break;
 
 			default:
@@ -142,7 +157,6 @@ int main_loop(void)
 	   Assume that (Sound Pressure/P0) = k * sample value (Linear!),
 	   and by experiment, we found that k = 0.45255.
 	*/
-	double k = 0.45255;
 	double Pvalue = 0;
 	int dB = 0;
 	int64_t square_sum = 0;
@@ -174,6 +188,10 @@ int main_loop(void)
 
 		snprintf(tmp, 16, "%d", dB);
 		mosquitto_publish(mosq, NULL, MQTT_PREFIX "/controls/dB", strlen(tmp), tmp, 2, true);
+		
+		if (debug) {
+			printf("%d dB\n", dB);
+		}
 	}
 }
 
@@ -189,6 +207,7 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "    -d device      ALSA capture device [default]\n");
 		fprintf(stderr, "    -r rate        Sample rate in Hz [16000]\n");
 		fprintf(stderr, "    -t period      RMS integrating period in milliseconds [500]\n");
+		fprintf(stderr, "    -k double      magic multiplier [0.45255]\n");
 		exit(EXIT_FAILURE);
 	}
 
