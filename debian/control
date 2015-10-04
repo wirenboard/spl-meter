@@ -1,0 +1,11 @@
+Source: wb-mqtt-spl-meter
+Maintainer: Alexey Ignatov <lexszero@gmail.com>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 9), libasound2-dev, libmosquitto-dev
+
+Package: wb-mqtt-spl-meter
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libasound2, libmosquitto1
+Description: WB MQTT driver for sound level meter using microphone
