@@ -48,10 +48,10 @@ THandlerConfig::THandlerConfig(const string fname)
 	}
 
 	DeviceName = root["device_name"].asString();
-	AlsaDevice = root["alsa_device"].asString();
-	SampleRate = root["sample_rate"].asInt();
-	Period = root["period"].asInt();
-	K = root["k"].asDouble();
+	AlsaDevice = root.get("alsa_device", Json::Value("default")).asString();
+	SampleRate = root.get("sample_rate", Json::Value(16000)).asInt();
+	Period = root.get("period", Json::Value(500)).asInt();
+	K = root.get("k", Json::Value(0.45255)).asDouble();
 }
 
 class TMQTTSplHandler : public TMQTTWrapper
@@ -123,11 +123,9 @@ int main(int argc, char *argv[])
 			break;
 		case 'p':
 			mqtt_config.Port = stoi(optarg);
-			cout << "port " << mqtt_config.Port << endl;
 			break;
 		case 'h':
 			mqtt_config.Host = optarg;
-			cout << "host " << mqtt_config.Host << endl;
 			break;
 		case '?':
 			break;
