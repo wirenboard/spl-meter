@@ -1,3 +1,9 @@
+wb-mqtt-spl-meter (1.1) stable; urgency=medium
+
+  * JSON config, C++ rewrite, etc
+
+ -- Alexey Ignatov <lexszero@gmail.com>  Thu, 08 Oct 2015 01:40:49 +0000
+
 wb-mqtt-spl-meter (1.0) stable; urgency=medium
 
   * Initial release.
