@@ -1,0 +1,8 @@
+{
+	"device_name" : "Sound level meter",
+
+	"alsa_device" : "default",
+	"sample_rate" : 16000,
+	"period" : 500,
+	"k" : 0.45255
+}
