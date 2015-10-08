@@ -18,8 +18,10 @@ $(TARGET): $(TARGET).cpp
 
 install: $(TARGET) config.json
 	install -d $(DESTDIR)/usr/bin
+	install -d $(DESTDIR)/etc/wb-mqtt-confed/schemas
 	install -m 0755 $(TARGET) $(DESTDIR)/usr/bin/
 	install -m 0644 config.json $(DESTDIR)/etc/wb-mqtt-spl-meter.json
+	install -m 0644 wb-mqtt-spl-meter.schema.json $(DESTDIR)/etc/wb-mqtt-confed/schemas/
 
 clean:
 	rm -f $(TARGET)
