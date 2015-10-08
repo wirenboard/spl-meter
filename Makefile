@@ -1,4 +1,4 @@
-TARGET = wb-mqtt-spl-meter
+BIN = wb-mqtt-spl-meter
 
 CXXFLAGS += -Wall -Wextra -std=c++0x -ggdb -O0
 LDFLAGS += -lasound -lm -lmosquitto -lmosquittopp -ljsoncpp -lwbmqtt
@@ -9,19 +9,24 @@ endif
 
 CXX=$(CROSS_COMPILE)g++
 
+CXX_PATH := $(shell which $(CROSS_COMPILE)g++-4.7)
+ifneq ($(CXX_PATH),)
+	CXX=$(CROSS_COMPILE)g++-4.7
+endif
+
 .PHONY: all install clean
 
-all: $(TARGET)
+all: $(BIN)
 
-$(TARGET): $(TARGET).cpp
+$(BIN): $(BIN).cpp
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $< -o $@
 
-install: $(TARGET) config.json
+install: $(BIN) config.json
 	install -d $(DESTDIR)/usr/bin
 	install -d $(DESTDIR)/etc/wb-mqtt-confed/schemas
-	install -m 0755 $(TARGET) $(DESTDIR)/usr/bin/
-	install -m 0644 config.json $(DESTDIR)/etc/wb-mqtt-spl-meter.json
-	install -m 0644 wb-mqtt-spl-meter.schema.json $(DESTDIR)/etc/wb-mqtt-confed/schemas/
+	install -m 0755 $(BIN) $(DESTDIR)/usr/bin/
+	install -m 0644 config.json $(DESTDIR)/etc/$(BIN).conf
+	install -m 0644 $(BIN).schema.json $(DESTDIR)/etc/wb-mqtt-confed/schemas/$(BIN).schema.json
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(BIN)
