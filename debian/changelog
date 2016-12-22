@@ -1,3 +1,9 @@
+wb-mqtt-spl-meter (1.1.1) stable; urgency=medium
+
+  * use newer libwbmqtt
+
+ -- Evgeny Boger <boger@contactless.ru>  Thu, 22 Dec 2016 19:41:00 +0300
+
 wb-mqtt-spl-meter (1.1) stable; urgency=medium
 
   * JSON config, C++ rewrite, etc
